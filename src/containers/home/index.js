@@ -6,7 +6,11 @@ import {
     increment,
     incrementAsync,
     decrement,
-    decrementAsync
+    decrementAsync,
+    getVessels,
+    getContainers,
+    getVesselPlans,
+    createVesselPlans
   } from '../../modules/counter'
 import VesselPlanTable from './../../components/VesselPlanTable'
 import './style.scss'
@@ -22,13 +26,14 @@ import './style.scss'
       </p>
   
       <p>
-        <button onClick={props.decrement} disabled={props.isDecrementing}>Decrementing</button>
+        <button onClick={props.getVessels} disabled={props.isDecrementing}>FETCH</button>
         <button onClick={props.decrementAsync} disabled={props.isDecrementing}>Decrement Async</button>
       </p>
   
       <p><button onClick={() => props.changePage()}>Go to about page via redux</button></p>
 
 
+      <button id="getData" onClick={props.createVesselPlans}>POST DATA </button>
       <VesselPlanTable/>
     </div>
   )
@@ -45,6 +50,10 @@ const mapStateToProps = state => ({
     incrementAsync,
     decrement,
     decrementAsync,
+    getVessels,
+    getContainers,
+    getVesselPlans,
+    createVesselPlans,
     changePage: () => push('/about-us')
   }, dispatch)
 

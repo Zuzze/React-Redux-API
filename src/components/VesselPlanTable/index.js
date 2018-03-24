@@ -1,63 +1,54 @@
 import React from 'react';
-import PropTypes from 'prop-types';
-import { withStyles } from 'material-ui/styles';
-import Table, { TableBody, TableCell, TableHead, TableRow } from 'material-ui/Table';
-import Paper from 'material-ui/Paper';
+import { combineReducers } from 'redux';
+import {
+  increment,
+  incrementAsync,
+  decrement,
+  decrementAsync, 
+  getVessels,
+  getContainers
+} from '../../modules/counter'
+import { push } from 'react-router-redux'
+import { bindActionCreators } from 'redux'
+import { connect } from 'react-redux'
 
 //Editable table containing vessels and their containers
-const styles = theme => ({
-  root: {
-    width: '100%',
-    marginTop: theme.spacing.unit * 3,
-    overflowX: 'auto',
-  },
-  table: {
-    minWidth: 700,
-    margin: 10
-  },
-});
 
-let id = 0;
-function createData(vessel, containers) {
-  id += 1;
-  return { id, vessel, containers,};
+export default class VesselPlanTable extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      vessels: []
+    }
+  }
+  
+  componentDidMount() {
+   this.state.vessels = this.props.decrement
+   console.log(this.state.vessels);
+  }
+
+  loadData(){
+    fetch('http://127.0.0.1:8000/vessels')
+    .then((res) => { return res.json() })
+    .then((data) => { 
+        console.log(data);
+        return data;
+   })
+  }
+
+  render() {
+    
+    return (
+      <div id="layout-content" className="layout-content-wrapper">
+        {this.state.vessels.map(( vessel ) => {
+          return (
+            <tr key={vessel.id}>
+              <td>{vessel.id}</td>
+              <td>{vessel.name}</td>
+            </tr>
+          );
+        })}
+      </div>
+    );
+  }
 }
-
-const data = [
-  createData('vessel 1', [1, 2]),
-  createData('vessel 2', [3]),
-  createData('vessel 3', [5]),
-];
-
-function VesselPlanTable(props) {
-  const { classes } = props;
-
-  return (
-    <Paper className={classes.root}>
-      <Table className={classes.table}>
-        <TableHead>
-          <TableRow>
-            <TableCell>Vessels</TableCell>
-            <TableCell>Containers</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {data.map(n => {
-            return (
-              <TableRow key={n.id}>
-                <TableCell>{n.vessel}</TableCell>
-                <TableCell>{n.containers}</TableCell>
-              </TableRow>
-            );
-          })}
-        </TableBody>
-      </Table>
-    </Paper>
-  );
-}
-
-VesselPlanTable.propTypes = {
-  classes: PropTypes.object.isRequired,
-};
-
-export default withStyles(styles)(VesselPlanTable);

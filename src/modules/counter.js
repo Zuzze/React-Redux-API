@@ -3,6 +3,11 @@ export const INCREMENT = 'counter/INCREMENT'
 export const DECREMENT_REQUESTED = 'counter/DECREMENT_REQUESTED'
 export const DECREMENT = 'counter/DECREMENT'
 
+export const VESSELS_REQUESTED = 'counter/VESSELS_REQUESTED'
+export const CONTAINERS_REQUESTED = 'counter/CONTAINERS_REQUESTED'
+export const PLANS_REQUESTED = 'counter/PLANS_REQUESTED'
+export const PLANS_CREATED = 'counter/PLANS_CREATED'
+
 /*Redux Thunk is middleware for Redux that allows you to write 
 action creators that return a function instead of an action*/
 
@@ -28,6 +33,7 @@ export default (state = initialState, action) => {
       }
 
     case DECREMENT_REQUESTED:
+    console.log("fetching data...");
       return {
         ...state,
         isDecrementing: true
@@ -71,7 +77,88 @@ export const incrementAsync = () => {
   }
 }
 
+export const getVessels = () => {
+    fetch('http://127.0.0.1:8000/vessels')
+    .then((res) => { 
+        console.log(res.json)
+        return res.json() })
+    .then((data) => { 
+        console.log(data);
+        return data;
+   })
+
+   return dispatch => {
+    dispatch({
+      type: VESSELS_REQUESTED
+    })
+  }
+}
+
+export const getContainers = () => {
+    fetch('http://127.0.0.1:8000/containers')
+    .then((res) => { 
+        console.log(res.json)
+        return res.json() })
+    .then((data) => { 
+        console.log(data);
+        return data;
+   })
+
+   return dispatch => {
+    dispatch({
+      type: CONTAINERS_REQUESTED
+    })
+  }
+}
+
+export const getVesselPlans = () => {
+    fetch('http://127.0.0.1:8000/vessel_plans')
+    .then((res) => { 
+        console.log(res.json)
+        return res.json() })
+    .then((data) => { 
+        console.log(data);
+        return data;
+   })
+   return dispatch => {
+    dispatch({
+      type: PLANS_REQUESTED
+    })
+  }
+}
+
+export const createVesselPlans = () => {
+    console.log("posting new vessel plans...")
+    fetch('http://127.0.0.1:8000/vessel_plans', {
+        method: 'POST',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+        vessel_id: 1,
+        container_ids: [1, 3],
+        })
+    })
+
+   return dispatch => {
+    dispatch({
+      type: PLANS_REQUESTED
+    })
+  }
+}
+
 export const decrement = () => {
+    fetch('http://127.0.0.1:8000/vessels')
+    .then((res) => { 
+        console.log(res.json)
+        return res.json() })
+    .then((data) => { 
+        console.log(data);
+        return data;
+   })
+
+   
   return dispatch => {
     dispatch({
       type: DECREMENT_REQUESTED
@@ -82,6 +169,7 @@ export const decrement = () => {
     })
   }
 }
+
 
 export const decrementAsync = () => {
   return dispatch => {
