@@ -4,58 +4,21 @@ import { withStyles } from 'material-ui/styles';
 import Table, { TableBody, TableCell, TableHead, TableRow } from 'material-ui/Table';
 import Paper from 'material-ui/Paper';
 import { combineReducers } from 'redux';
+import { getVessels } from '../../modules/counter'
+import './style.scss'
 
-//Editable table containing vessels and their containers
-const styles = theme => ({
-  root: {
-    width: '100%',
-    marginTop: theme.spacing.unit * 3,
-    overflowX: 'auto',
-  },
-  table: {
-    minWidth: 300,
-    margin: 10
-  },
-});
+const LeavingVessels = props => (
+    <div id="container">
+      <h1>VESSELS</h1>
+      <p>Count: {props.count}</p>
+        <div id="vessels" onClick={props.getVessels}>{props.getVessels}</div>
+    </div>
+  )
 
-let id = 0;
-function createData(vessel, containers) {
-  id += 1;
-  return { id, vessel, containers,};
-}
+  const mapStateToProps = state => ({
+    count: state.counter.count,
+    isIncrementing: state.counter.isIncrementing,
+    isDecrementing: state.counter.isDecrementing
+  })
 
-const data = [];
-
-function VesselPlanTable(props) {
-  const { classes } = props;
-
-  return (
-    <Paper className={classes.root}>
-      <Table className={classes.table}>
-        <TableHead>
-          <TableRow>
-            <TableCell>Vessel</TableCell>
-            <TableCell>Leaving</TableCell>
-            <TableCell>Arriving</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {data.map(n => {
-            return (
-              <TableRow key={n.id}>
-                <TableCell>{n.containers}</TableCell>
-                <TableCell>{n.vessel}</TableCell>
-              </TableRow>
-            );
-          })}
-        </TableBody>
-      </Table>
-    </Paper>
-  );
-}
-
-VesselPlanTable.propTypes = {
-  classes: PropTypes.object.isRequired,
-};
-
-export default withStyles(styles)(VesselPlanTable);
+  export default LeavingVessels

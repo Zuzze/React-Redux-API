@@ -10,13 +10,25 @@ import {
     getVessels,
     getContainers,
     getVesselPlans,
-    createVesselPlans
+    createVesselPlans,
+    getVesselTable
   } from '../../modules/counter'
 import VesselPlanTable from './../../components/VesselPlanTable'
+import LeavingVessels from './../../components/LeavingVessels'
 import './style.scss'
 
   const Home = props => (
     <div id="container">
+
+    <button onClick={props.getVessels}>VESSELS</button>
+    <button onClick={props.getContainers}>CONTAINERS</button>
+    <button onClick={props.getVesselPlans}>VESSEL PLANS</button>
+    <button onClick={props.createVesselPlans}>ADD VESSEL PLAN</button>
+    
+    <div id="content">
+      {props.getVesselTable}
+    </div>
+      
       <h1>Home</h1>
       <p>Count: {props.count}</p>
   
@@ -35,9 +47,9 @@ import './style.scss'
 
       <button id="getData" onClick={props.createVesselPlans}>POST DATA </button>
       <VesselPlanTable/>
+      <LeavingVessels/>
     </div>
   )
-
 
 const mapStateToProps = state => ({
     count: state.counter.count,
@@ -54,6 +66,7 @@ const mapStateToProps = state => ({
     getContainers,
     getVesselPlans,
     createVesselPlans,
+    getVesselTable,
     changePage: () => push('/about-us')
   }, dispatch)
 

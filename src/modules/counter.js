@@ -94,6 +94,23 @@ export const getVessels = () => {
   }
 }
 
+export const getVesselTable = () => {
+    fetch('http://127.0.0.1:8000/vessels')
+    .then((res) => { 
+        console.log(res.json)
+        return res.json() })
+    .then((data) => { 
+        console.log(data);
+        return '<h1>hey</h1>';
+   })
+
+   return dispatch => {
+    dispatch({
+      type: VESSELS_REQUESTED
+    })
+  }
+}
+
 export const getContainers = () => {
     fetch('http://127.0.0.1:8000/containers')
     .then((res) => { 
@@ -143,7 +160,7 @@ export const createVesselPlans = () => {
 
    return dispatch => {
     dispatch({
-      type: PLANS_REQUESTED
+      type: PLANS_CREATED
     })
   }
 }
