@@ -1,0 +1,21 @@
+table {
+    margin: 1em;
+    padding: 1em;
+    width: 80%;
+    margin: auto;
+}
+
+thead {
+    background-color: rgb(221, 81, 81);
+    color: white;
+    font-size: 1.2em;
+}
+
+tbody {
+    background-color: white;
+    color: grey;
+}
+
+tbody tr :hover {
+        background-color: rgb(226, 124, 124);  
+}

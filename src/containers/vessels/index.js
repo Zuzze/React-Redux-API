@@ -2,6 +2,8 @@ import React, { Component } from 'react'
 import { push } from 'react-router-redux'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
+import {Tabs, Tab} from 'material-ui/Tabs'; 
+import { Button } from 'react-bootstrap';
 import {
     increment,
     incrementAsync,
@@ -16,88 +18,51 @@ import {
 //import {vessels} from '../../modules/vessels'
 import VesselPlanTable from './../../components/VesselPlanTable';
 import LeavingVessels from './../../components/LeavingVessels';
+import ResponsiveTable from './../../components/responsiveTable';
 require('./style.scss');
 
-class Home extends Component {
+const styles = {
+  headline: {
+    fontSize: 24,
+    paddingTop: 16,
+    marginBottom: 12,
+    fontWeight: 400,
+  },
+};
 
-  constructor(){
-    super();
+class Vessels extends Component {
+
+  constructor(props){
+    super(props);
+    this.vessels = [];
     this.state = {
       vessels: [],
-      containers: [],
-      vesselPlans: []
     }
   }
 
   componentDidMount(){
     this.createVesselList();
-    this.createContainerList();
-    this.createVesselPlanList();
   }
 
   createVesselList() {
     fetch('http://127.0.0.1:8000/vessels')
-    .then(results => { return results.json()
-    }).then(data => {
+    .then(response => response.json())
+    .then(data => {
       console.log(data);
-      let vessels = data.map( (vessel) => {
-        console.log(vessel.id);
-        return(
-          <li key={vessel.id}>{vessel.id} {vessel.name}</li>
-        )
-      })
-      this.setState({vessels: vessels});
-    })
+      this.vessels = data; 
+    });
+    console.log(this.vessels);
   }
-
-  createContainerList(){
-    fetch('http://127.0.0.1:8000/containers')
-    .then(results => { return results.json()
-    }).then(data => {
-      console.log(data);
-      let containers = data.map( (container) => {
-        console.log(container.id);
-        return(
-          <li key={container.id}>{container.id} {container.container_number}</li>
-        )
-      })
-      this.setState({containers: containers});
-    })
-  }
-
-  createVesselPlanList(){
-    fetch('http://127.0.0.1:8000/vessel_plans')
-    .then(results => { return results.json()
-    }).then(data => {
-      console.log(data);
-      let vesselPlans = data.map( (plan) => {
-        return(
-          <li key={plan.vessel_id + plan.container_ids}>
-            {plan.vessel_id} {plan.container_ids}
-          </li>
-        )
-      })
-      this.setState({vesselPlans: vesselPlans});
-    })
-  }
-
+  
   render() {
     return (
-      <div>
+      <div className="container" align="center">
         <h1>VESSELS</h1>
-        <ul>
-          {this.state.vessels}
-        </ul>
-
-        <h1>CONTAINERS</h1>
-        <ul>
-          {this.state.containers}
-        </ul>
-
-        <h1>VESSEL PLANS</h1>
-        <ul>
-          {this.state.vesselPlans}
-        </ul>
+        <p>List of leaving vessels</p>
+        <ResponsiveTable 
+          tableData = {this.vessels}
+          tableHeaders = {['Vessel ID', 'Vessel Name']}
+        />
       </div>
     )
   }
@@ -162,4 +127,4 @@ function mapStateToProps(state){
 
 //connect container stuff to component
 //export default connect(mapStateToProps, mapDispatchToProps)(Home)
-export default connect(mapStateToProps)(Home)
+export default connect(mapStateToProps)(Vessels)

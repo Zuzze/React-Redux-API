@@ -1,19 +1,21 @@
 import React from 'react';
 import { Route, Link } from 'react-router-dom';
-import Home from '../home';
-import About from '../about';
+import Vessels from '../vessels';
+import Containers from '../containers';
+import vesselPlans from '../vesselPlans';
+import Navigation from '../../components/navigation'
 require('../../index.scss');
 
 const App = () => (
   <div>
     <header>
-      <Link to="/">Home</Link>
-      <Link to="/about-us">About</Link>
+      <Navigation/>
     </header>
 
-    <main>
-      <Route exact path="/" component={Home} />
-      <Route exact path="/about-us" component={About} />
+    <main id="container">
+      <Route exact path="/vessels" component={Vessels} />
+      <Route exact path="/containers" component={Containers} />
+      <Route exact path="/vessel_plans" component={vesselPlans} />
     </main>
   </div>
 );
