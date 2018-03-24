@@ -45,6 +45,11 @@ export default (state = initialState, action) => {
         count: state.count - 1,
         isDecrementing: !state.isDecrementing
       }
+    case VESSELS_REQUESTED:
+    return {
+    ...state,
+    isDecrementing: !state.isDecrementing
+    }
 
     default:
       return state
@@ -77,7 +82,7 @@ export const incrementAsync = () => {
   }
 }
 
-export const getVessels = () => {
+export const vessels = () => {
     fetch('http://127.0.0.1:8000/vessels')
     .then((res) => { 
         console.log(res.json)
