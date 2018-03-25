@@ -68,7 +68,7 @@ class PlanForm extends React.Component {
 
     render() {
       return(
-        <div>
+        <div className="formContainer">
           <h3>ADD CONTAINER TO VESSEL</h3>
           <p>Add unassigned containers to leaving vessels</p>
           <form>

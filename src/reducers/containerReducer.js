@@ -11,7 +11,6 @@ import {
   };
   
   export default function containerReducer(state = initialState, action) {
-    console.log("container reducer started...");
     switch(action.type) {
       case FETCH_CONTAINERS_BEGIN:
         return {

@@ -11,7 +11,6 @@ import {
   };
   
   export default function vesselReducer(state = initialState, action) {
-    console.log("vessel reducer started...");
     switch(action.type) {
       case FETCH_VESSELS_BEGIN:
         // Mark the state as "loading" so we can show a spinner, reset errors

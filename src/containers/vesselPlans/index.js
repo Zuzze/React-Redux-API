@@ -50,7 +50,7 @@ class VesselPlans extends Component {
 
   render() {
     console.log(this.props);
-    const { error, loading, vesselPlans } = this.props;
+    const { error, loading, vesselPlans, vessels } = this.props;
     
     
     if (error) {

@@ -11,7 +11,6 @@ import {
   };
   
   export default function vesselPlanReducer(state = initialState, action) {
-    console.log("vessel plan reducer started...");
     switch(action.type) {
       case FETCH_VESSEL_PLANS_BEGIN:
         // Mark the state as "loading" so we can show a spinner or something
