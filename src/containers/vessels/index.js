@@ -17,13 +17,14 @@ class Vessels extends Component {
     console.log(this.props);
     const { error, loading, vessels } = this.props;
     
-    
     if (error) {
-      return <div>Error! {error.message}</div>;
+      console.log(`Error! ${error.message}`)
+      return <div>Something is not right, check console for details</div>;
     }
 
     if (loading) {
-      return <div>Loading...</div>;
+      console.log("loading");
+      return <div></div>;
     }
 
     return (

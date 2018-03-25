@@ -18,13 +18,15 @@ class Containers extends React.Component {
   render() {
     console.log(this.props);
     const { error, loading, containers } = this.props;
-    
+     
     if (error) {
-      return <div>Error! {error.message}</div>;
+      console.log(`Error! ${error.message}`)
+      return <div>Something is not right, check console for details</div>;
     }
 
     if (loading) {
-      return <div>Loading...</div>;
+      console.log("loading");
+      return <div></div>;
     }
 
     return (

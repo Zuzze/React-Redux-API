@@ -1,6 +1,9 @@
 export const FETCH_VESSEL_PLANS_BEGIN   = 'FETCH_VESSEL_PLANS_BEGIN';
 export const FETCH_VESSEL_PLANS_SUCCESS = 'FETCH_VESSEL_PLANS_SUCCESS';
 export const FETCH_VESSEL_PLANS_FAILURE = 'FETCH_VESSEL_PLANS_FAILURE';
+export const ADD_VESSEL_PLAN_BEGIN = 'ADD_VESSEL_PLAN_BEGIN';
+export const ADD_VESSEL_PLAN_SUCCESS = 'ADD_VESSEL_PLAN_SUCCESS';
+export const ADD_VESSEL_PLAN_FAILURE = 'ADD_VESSEL_PLAN_FAILURE';
 
 export const fetchVesselPlansBegin = () => ({
   type: FETCH_VESSEL_PLANS_BEGIN
@@ -16,21 +19,57 @@ export const fetchVesselPlansFailure = error => ({
   payload: { error }
 });
 
+export const addVesselPlanBegin = () => ({
+    type: ADD_VESSEL_PLAN_BEGIN
+});
 
+export const addVesselPlanSuccess = plan => ({
+    type: ADD_VESSEL_PLAN_SUCCESS,
+    payload: plan
+});
+
+export const addVesselPlanFailure = error => ({
+    type: ADD_VESSEL_PLAN_FAILURE,
+    payload: { error }
+});
+  
 export function fetchVesselPlans() {
-  return dispatch => {
-    dispatch(fetchVesselPlansBegin());
-    return fetch('http://127.0.0.1:8000/vessel_plans')
-    .then(handleErrors)
-    .then(results => { results.json()
-    .then(json => {
-      console.log(json);
-      dispatch(fetchVesselPlansSuccess(json));
-        return json;
-      })
-      .catch(error => dispatch(fetchVesselPlansFailure(error)));
-    });
+    return dispatch => {
+        dispatch(fetchVesselPlansBegin());
+        return fetch('http://127.0.0.1:8000/vessel_plans')
+        .then(handleErrors)
+        .then(results => { results.json()
+        .then(json => {
+        console.log(json);
+        dispatch(fetchVesselPlansSuccess(json));
+            return json;
+        })
+        .catch(error => dispatch(fetchVesselPlansFailure(error)));
+        });
+    }
 }
+
+export function addVesselPlan(vesselId, containerId) {
+    console.log("assigning container to vessel...")
+    console.log(vesselId);
+    console.log(containerId);
+    fetch('http://127.0.0.1:8000/vessel_plans', {
+        method: 'POST',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+        vessel_id: 1,
+        container_ids: [1, 3],
+        })
+    })
+
+   return dispatch => {
+    dispatch({
+      type: ADD_VESSEL_PLAN_SUCCESS
+    })
+  }
 }
 
   // Handle HTTP errors since fetch won't.

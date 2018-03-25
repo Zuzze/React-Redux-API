@@ -80,11 +80,13 @@ class VesselPlans extends Component {
     
     
     if (error) {
-      return <div>Error! {error.message}</div>;
+      console.log(`Error! ${error.message}`)
+      return <div>Something is not right, check console for details</div>;
     }
 
     if (loading) {
-      return <div>Loading...</div>;
+      console.log("loading");
+      return <div></div>;
     }
 
     return (
@@ -102,6 +104,8 @@ class VesselPlans extends Component {
 }
 
 const mapStateToProps = state => ({
+  vessels: state.vessels.items,
+  containers: state.containers.items,
   vesselPlans: state.vesselPlans.items,
   loading: state.vesselPlans.loading,
   error: state.vesselPlans.error

@@ -1,7 +1,7 @@
 import React from 'react';
 import { MenuItem, DropdownButton } from 'react-bootstrap';
 import { fetchVesselPlans } from '../../actions/vesselPlanActions';
-//import { selectVessel, selectContainer } from '../../actions/planFormActions';
+import { addVesselPlan } from '../../actions/vesselPlanActions';
 import { VesselPlanReducer } from '../../reducers/vesselPlanReducer';
 import { fetchContainers } from '../../actions/containerActions';
 import { containerReducer } from '../../reducers/containerReducer';
@@ -17,7 +17,7 @@ class PlanForm extends React.Component {
       super(props);
       this.onVesselSelect = this.onVesselSelect.bind(this);
       this.onContainerSelect = this.onContainerSelect.bind(this);
-      this.addVesselPlan = this.addVesselPlan.bind(this);
+      this.addVesselPlanLocally = this.addVesselPlanLocally.bind(this);
       
       this.state = { 
         vesselTitle: 'Select Vessel...',
@@ -28,15 +28,12 @@ class PlanForm extends React.Component {
     }
 
     onVesselSelect(target) {
-      console.log(target);
       this.setState({ vesselTitle: `${target.name} (ID: ${target.id})`});
       this.setState({selectedVesselId: target.id});
       console.log(this.state.selectedVesselId);
-      //this.props.passTargetToParent(target);
     }
 
     onContainerSelect(target) {
-      console.log(target);
       this.setState({ containerTitle: `${target.container_number} (ID: ${target.id})` });
       this.setState({selectedContainerId: target.id});
       console.log(this.state.selectedContainerId);
@@ -47,9 +44,20 @@ class PlanForm extends React.Component {
        event.preventDefault();
     }
 
-    addVesselPlan(){
-      console.log(this.state.selectedVesselId);
-      console.log(this.state.selectedContainerId);
+    addVesselPlanLocally(){
+      console.log("posting new vessel plans...");
+        fetch('http://127.0.0.1:8000/vessel_plans', {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+            vessel_id: this.state.selectedVesselId,
+            container_ids: [this.state.selectedContainerId],
+            })
+        })
+        this.createVesselPlanList();
     }
     
 
@@ -65,11 +73,44 @@ class PlanForm extends React.Component {
       this.setState({selectedContainers: containers});
     }
 
+    /**
+     * returns whether the container has already been assigned to vesselplan
+     * containers in vessel plan cannot be assigned again to vessel plans
+     * @param id : int
+     */
+    containerAssigned(id){
+      for(let plan of this.props.vesselPlans){
+        console.log(plan.container_ids);
+        if(plan.container_ids.includes(id)){
+          return true;
+        }
+      }
+      return false;
+    }
+
     render() {
       return(
         <div>
           <h3>ADD CONTAINER TO VESSEL</h3>
           <form>
+            <DropdownButton
+              bsStyle="default"
+              title={this.state.containerTitle}
+              key="containerDropdown"
+              id="containerlDropDown"
+              >
+              {this.props.containers.map( (obj, index) => {
+                if(!this.containerAssigned(obj.id)){
+                  return (
+                    <MenuItem key={`container-dropdown-${index}`} eventKey={index} onSelect={() => this.onContainerSelect(obj) } >
+                      {obj.container_number} (ID: {obj.id})
+                    </MenuItem>
+                  );
+                } else
+                   return;
+                })
+              } 
+            </DropdownButton>
             <DropdownButton
               bsStyle="default"
               title={this.state.vesselTitle}
@@ -85,23 +126,7 @@ class PlanForm extends React.Component {
               })
             } 
             </DropdownButton>
-
-            <DropdownButton
-              bsStyle="default"
-              title={this.state.containerTitle}
-              key="containerDropdown"
-              id="containerlDropDown"
-              >
-              {this.props.containers.map( (obj, index) => {
-                    return (
-                      <MenuItem key={`container-dropdown-${index}`} eventKey={index} onSelect={() => this.onContainerSelect(obj) } >
-                        {obj.container_number} (ID: {obj.id})
-                      </MenuItem>
-                    );
-                  })
-                } 
-            </DropdownButton>
-            <input className="submitButton" type="submit" value="Add" onClick={this.addVesselPlan}/>
+            <input className="submitButton" type="submit" value="Add" onClick={this.addVesselPlanLocally}/>
           </form>
         </div>
       )}
@@ -111,6 +136,7 @@ class PlanForm extends React.Component {
 const mapStateToProps = state => ({
   vessels: state.vessels.items,
   containers: state.containers.items,
+  vesselPlans: state.vesselPlans.items
   //selectedVessel: state.selectedVessel,
   //selectedContainer: state.selectedContainer
   //loading: state.vesselPlans.loading,
