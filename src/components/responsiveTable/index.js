@@ -28,7 +28,8 @@ require('./style.scss');
                     </tr>
                 </thead>
                 <tbody>
-                    {this.tableData.map( (obj, index) => {
+                    {(this.tableData && this.tableData.length > 0) ?
+                        this.tableData.map( (obj, index) => {
                         return (
                             <tr key={index}>
                                 { Object.values(obj).map( val => {
@@ -36,7 +37,7 @@ require('./style.scss');
                                 })}
                             </tr>
                         );
-                    })}
+                    }) : <tr>No data found</tr> }
                 </tbody>
             </Table>
           )

@@ -2,8 +2,8 @@ import React, { Component } from 'react'
 import { push } from 'react-router-redux'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
-import {Tabs, Tab} from 'material-ui/Tabs'; 
 import { Button } from 'react-bootstrap';
+import PropTypes from 'prop-types'
 import {
     increment,
     incrementAsync,
@@ -15,9 +15,9 @@ import {
     createVesselPlans,
     getVesselTable
   } from '../../modules/counter'
+  import { fetchVessels } from '../../actions/apiActions'
+  import { VesselReducer } from '../../reducers/vesselReducer'
 //import {vessels} from '../../modules/vessels'
-import VesselPlanTable from './../../components/VesselPlanTable';
-import LeavingVessels from './../../components/LeavingVessels';
 import ResponsiveTable from './../../components/responsiveTable';
 require('./style.scss');
 
@@ -32,40 +32,54 @@ const styles = {
 
 class Vessels extends Component {
 
-  constructor(props){
+  /*constructor(props){
     super(props);
     this.vessels = [];
     this.state = {
       vessels: [],
     }
-  }
+  }*/
 
   componentDidMount(){
-    this.createVesselList();
-  }
-
-  createVesselList() {
-    fetch('http://127.0.0.1:8000/vessels')
-    .then(response => response.json())
-    .then(data => {
-      console.log(data);
-      this.vessels = data; 
-    });
-    console.log(this.vessels);
+    this.props.dispatch(fetchVessels());
+    console.log(this.props);
   }
   
   render() {
+    console.log(this.props);
+    const { error, loading, vessels } = this.props;
+    
+    
+    if (error) {
+      return <div>Error! {error.message}</div>;
+    }
+
+    if (loading) {
+      return <div>Loading...</div>;
+    }
+
     return (
       <div className="container" align="center">
         <h1>VESSELS</h1>
         <p>List of leaving vessels</p>
         <ResponsiveTable 
-          tableData = {this.vessels}
+          tableData = {this.props.vessels}
           tableHeaders = {['Vessel ID', 'Vessel Name']}
         />
       </div>
     )
   }
+}
+
+//update changes in events
+const mapStateToProps = state => ({
+  vessels: state.vessels.items,
+  loading: state.vessels.loading,
+  error: state.vessels.error
+});
+
+const mapActionsToProps = {
+ 
 }
  
     /*<div id="container">
@@ -102,7 +116,7 @@ class Vessels extends Component {
   
 
 
-//transform component to container
+/*transform component to container
 function mapStateToProps(state){
     return {
       vessels: state.vessels,

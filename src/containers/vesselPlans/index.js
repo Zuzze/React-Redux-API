@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import ResponsiveTable from '../../components/responsiveTable'
+require('./style.scss');
 
 class VesselPlans extends Component {
 
@@ -92,16 +93,7 @@ class VesselPlans extends Component {
   render() {
     return (
         <div align="center" className="container">
-           <h1>VESSEL PLANS</h1>
-           <p>Containers that are assigned to vessels</p>
-          <ResponsiveTable
-            tableData={this.state.vesselPlans}
-            tableHeaders={['Vessel (id)', 'containers (id)']}
-          />
-           
-            {this.state.vesselPlans}
-
-          <h1>ASSIGN CONTAINER TO VESSEL</h1>
+          <h1>ADD CONTAINER TO VESSEL</h1>
           <form>
             <label>
               Vessel
@@ -111,9 +103,17 @@ class VesselPlans extends Component {
               Containers
               <input type="text" name="name" value={this.state.selectedContainers} onChange={this.selectContainers}/>
             </label>
-            <input type="submit" value="Submit" onClick={this.assignContainerToVessel}/>
+            <input type="submit" value="Add" onClick={this.assignContainerToVessel}/>
           </form>
-          <button onClick={this.assignContainerToVessel}>SAVE</button>
+
+          <h1>CURRENT VESSEL PLANS</h1>
+           <p>Containers that are assigned to vessels</p>
+          <ResponsiveTable
+            tableData={this.state.vesselPlans}
+            tableHeaders={['Vessel (id)', 'containers (id)']}
+          />
+           
+            {this.state.vesselPlans}
         </div>
     )
   }

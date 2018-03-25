@@ -4,19 +4,19 @@ import { withStyles } from 'material-ui/styles';
 import Table, { TableBody, TableCell, TableHead, TableRow } from 'material-ui/Table';
 import Paper from 'material-ui/Paper';
 import ResponsiveTable from '../../components/responsiveTable';
+import { fetchContainers } from '../../actions/containerActions'
+import { ContainerReducer } from '../../reducers/containerReducer'
+import { connect } from 'react-redux'
 
 class Containers extends React.Component {
   
     constructor(props){
       super(props);
-      this.tableData = null;
-      this.state = {
-        containers: [],
-      }
     }
   
     componentDidMount(){
-      this.createContainerList();
+      this.props.dispatch(fetchContainers());
+      console.log(this.props);
     }
   
 
@@ -36,6 +36,7 @@ class Containers extends React.Component {
       })
     }
 
+
   render() {
 
     return (
@@ -44,7 +45,7 @@ class Containers extends React.Component {
         <p>List of all containers to be shipped</p>
         <ResponsiveTable
           tableHeaders = {['Container ID', 'Container number']}
-          tableData = {[{id: 1, container_number: "XYZ"}, {id: 2, container_number: "X"}]}
+          tableData = {this.props.containers}
         />
       </div>
       
@@ -74,4 +75,11 @@ class Containers extends React.Component {
   }
 }
 
-export default Containers;
+//update changes in events
+const mapStateToProps = state => ({
+  containers: state.containers.items,
+  loading: state.containers.loading,
+  error: state.containers.error
+});
+
+export default connect(mapStateToProps)(Containers);
