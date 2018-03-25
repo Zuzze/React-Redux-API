@@ -9,7 +9,7 @@ require('./style.scss');
         constructor(props) {
           super(props);
           this.tableHeaders = props.tableHeaders;
-          this.tableData= props.tableData;
+          this.tableData = props.tableData;//[[r1c1, r1c2], [r2c1,r2c2]...]
           console.log(this.tableData);
         }
     
@@ -29,11 +29,11 @@ require('./style.scss');
                 </thead>
                 <tbody>
                     {(this.tableData && this.tableData.length > 0) ?
-                        this.tableData.map( (obj, index) => {
+                        this.tableData.map( (rowData, row) => {
                         return (
-                            <tr key={index}>
-                                { Object.values(obj).map( val => {
-                                    return <td key={val}>{val}</td>
+                            <tr key={`row${row}`}>
+                                { rowData.map( (val, col) => {
+                                    return <td key={`${row}-${col}`}>{val}</td>
                                 })}
                             </tr>
                         );

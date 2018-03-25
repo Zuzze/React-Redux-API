@@ -1,11 +1,6 @@
 import React from 'react';
-import PropTypes from 'prop-types';
-import { withStyles } from 'material-ui/styles';
-import Table, { TableBody, TableCell, TableHead, TableRow } from 'material-ui/Table';
-import Paper from 'material-ui/Paper';
 import ResponsiveTable from '../../components/responsiveTable';
 import { fetchContainers } from '../../actions/containerActions'
-import { ContainerReducer } from '../../reducers/containerReducer'
 import { connect } from 'react-redux'
 
 class Containers extends React.Component {
@@ -35,32 +30,9 @@ class Containers extends React.Component {
         <p>List of all containers to be shipped</p>
         <ResponsiveTable
           tableHeaders = {['Container ID', 'Container number']}
-          tableData = {this.props.containers}
+          tableData = {containers.map( c => [c.id, c.container_number])}
         />
       </div>
-      
-
-      /*
-      <Paper className={classes.root}>
-        <Table className={classes.table}>
-          <TableHead>
-            <TableRow>
-              <TableCell>Vessels</TableCell>
-              <TableCell>Containers</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {data.map(n => {
-              return (
-                <TableRow key={n.id}>
-                  <TableCell>{n.vessel}</TableCell>
-                  <TableCell>{n.containers}</TableCell>
-                </TableRow>
-              );
-            })}
-          </TableBody>
-        </Table>
-      </Paper>*/
     );
   }
 }

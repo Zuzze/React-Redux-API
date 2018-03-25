@@ -1,17 +1,13 @@
 import React from 'react';
-import { Navbar, Nav, NavItem, NavbarBrand } from 'react-bootstrap';
+import { Navbar, Nav, NavItem } from 'react-bootstrap';
 require('./style.scss');
 
       /**
        * Global responsive Navbar for the app
        */
       export default class Navigation extends React.Component {
-        constructor(props) {
-          super(props);
-        }
     
         render() {
-          
           return (
             <Navbar collapseOnSelect>
             <Navbar.Header>

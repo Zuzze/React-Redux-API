@@ -32,6 +32,7 @@ export const addVesselPlanFailure = error => ({
     type: ADD_VESSEL_PLAN_FAILURE,
     payload: { error }
 });
+
   
 export function fetchVesselPlans() {
     return dispatch => {
@@ -51,8 +52,6 @@ export function fetchVesselPlans() {
 
 export function addVesselPlan(vesselId, containerId) {
     console.log("assigning container to vessel...")
-    console.log(vesselId);
-    console.log(containerId);
     fetch('http://127.0.0.1:8000/vessel_plans', {
         method: 'POST',
         headers: {
@@ -60,8 +59,8 @@ export function addVesselPlan(vesselId, containerId) {
             'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-        vessel_id: 1,
-        container_ids: [1, 3],
+        vessel_id: vesselId,
+        container_ids: [containerId],
         })
     })
 

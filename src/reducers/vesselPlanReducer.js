@@ -2,8 +2,6 @@ import {
     FETCH_VESSEL_PLANS_BEGIN,
     FETCH_VESSEL_PLANS_SUCCESS,
     FETCH_VESSEL_PLANS_FAILURE,
-    //SET_SELECTED_CONTAINER,
-    //SET_SELECTED_VESSEL
   } from '../actions/vesselPlanActions';
   
   const initialState = {
@@ -51,42 +49,3 @@ import {
         return state;
     }
   }
-
- 
-
-  /*
-   const initialVessel = {
-    selectedVessel: null,
-  };
-
-  export function selectedVesselReducer(state = initialVessel, action) {
-    console.log("selected vessel reducer started...");
-    switch(action.type) {
-      case SET_SELECTED_VESSEL:
-        return {
-            ...state,
-            selectedVessel: action.payload.selectedVessel
-        };
-        default:
-        // ALWAYS have a default case in a reducer
-        return state;
-    }
-  }
-
-  const initialContainer = {
-    selectedVessel: null,
-  };
-
-  export function selectedContainerReducer(state = initialContainer, action) {
-    console.log("selected container reducer started...");
-    switch(action.type) {
-        case SET_SELECTED_CONTAINER:
-            return {
-                ...state,
-                selectedContainer: action.payload.selected_container
-            }
-        default:
-        // ALWAYS have a default case in a reducer
-        return state;
-    }
-  }*/
