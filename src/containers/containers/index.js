@@ -10,34 +10,22 @@ import { connect } from 'react-redux'
 
 class Containers extends React.Component {
   
-    constructor(props){
-      super(props);
-    }
-  
-    componentDidMount(){
-      this.props.dispatch(fetchContainers());
-      console.log(this.props);
-    }
-  
-
-    createContainerList(){
-      fetch('http://127.0.0.1:8000/containers')
-      .then(results => { return results.json()
-      }).then(data => {
-        console.log(data);
-        this.tableData = data;
-        let containers = data.map( (container) => {
-          console.log(container.id);
-          return(
-            <li key={container.id}>{container.id} {container.container_number}</li>
-          )
-        })
-        this.setState({containers: containers});
-      })
-    }
-
+  componentDidMount(){
+    this.props.dispatch(fetchContainers());
+    console.log(this.props);
+  }
 
   render() {
+    console.log(this.props);
+    const { error, loading, containers } = this.props;
+    
+    if (error) {
+      return <div>Error! {error.message}</div>;
+    }
+
+    if (loading) {
+      return <div>Loading...</div>;
+    }
 
     return (
       <div align="center" className="container">

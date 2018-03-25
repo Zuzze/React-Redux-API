@@ -1,42 +1,22 @@
-import React, { Component } from 'react'
-import ResponsiveTable from '../../components/responsiveTable'
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { fetchVesselPlans } from '../../actions/vesselPlanActions';
+import { VesselPlanReducer } from '../../reducers/vesselPlanReducer';
+import { fetchContainers } from '../../actions/containerActions';
+import { containerReducer } from '../../reducers/containerReducer';
+import { fetchVessels } from '../../actions/apiActions';
+import { vesselReducer } from '../../reducers/vesselReducer';
+import ResponsiveTable from '../../components/responsiveTable';
+import PlanForm from '../../components/planForm';
 require('./style.scss');
 
 class VesselPlans extends Component {
 
-  constructor(){
-    super();
-    this.state = {
-      vesselPlans: [],
-      selectedVessel: null,
-      selectedContainers: []
-    }
-    this.selectVessel = this.selectVessel.bind(this);
-    this.selectContainers = this.selectContainers.bind(this);
-  }
-
   componentDidMount(){
-    this.createVesselPlanList();
-  }
-
-  createVesselPlanList(){
-    fetch('http://127.0.0.1:8000/vessel_plans')
-    .then(results => { return results.json()
-    }).then(data => {
-      console.log(data);
-      let vesselPlans = data.map( (plan) => {
-        return(
-          <li key={plan.vessel_id + plan.container_ids}>
-            {plan.vessel_id} {plan.container_ids}
-          </li>
-        )
-      })
-      if(vesselPlans.length > 0){
-        this.setState({vesselPlans: vesselPlans});
-      } else{
-        this.setState({vesselPlans: 'No vessel plans have been created yet'});
-      }
-    })
+    this.props.dispatch(fetchVesselPlans());
+    this.props.dispatch(fetchContainers());
+    this.props.dispatch(fetchVessels());
+    console.log(this.props);
   }
 
   assignContainerToVessel(event){
@@ -50,8 +30,8 @@ class VesselPlans extends Component {
             'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-        vessel_id: this.state.selectedVessel,
-        container_ids: this.state.selectedContainers,
+        vessel_id: 1,
+        container_ids: 2,
         })
     })
     //this.createVesselPlanList();
@@ -72,51 +52,59 @@ class VesselPlans extends Component {
     })
     this.createVesselPlanList();
   }
-
-  selectVessel(event){
-    console.log(event.target.value.toUpperCase());
-    this.setState({selectVessel: event.target.value.toUpperCase()});
-  }
-
-  selectContainers(event){
-    console.log(event.target.value.toUpperCase());
-    let containers = [];
-    containers.push(event.target.value.toUpperCase());
-    this.setState({selectedContainers: containers});
-  }
   
   handleSubmit(event) {
     alert('An essay was submitted: ' + this.state.value);
     event.preventDefault();
   }
 
+  getTableData(){
+    let vesselList = []
+    let containersList = []
+    this.props.vesselPlans.map( plan => {
+      vesselList.push(plan.vessel_id);
+      let containerString = "";
+      plan.container_ids.map( container => {
+        containerString += container.value + ", ";
+      });
+    });
+    console.log(vesselList);
+    console.log(containersList);
+    return [vesselList, containersList]
+  }
+
+
   render() {
+    console.log(this.props);
+    const { error, loading, vesselPlans, vessels, containers } = this.props;
+    
+    
+    if (error) {
+      return <div>Error! {error.message}</div>;
+    }
+
+    if (loading) {
+      return <div>Loading...</div>;
+    }
+
     return (
         <div align="center" className="container">
-          <h1>ADD CONTAINER TO VESSEL</h1>
-          <form>
-            <label>
-              Vessel
-              <input type="text" name="vessel" value={this.state.selectedVessel} onChange={this.selectVessel} />
-            </label>
-            <label>
-              Containers
-              <input type="text" name="name" value={this.state.selectedContainers} onChange={this.selectContainers}/>
-            </label>
-            <input type="submit" value="Add" onClick={this.assignContainerToVessel}/>
-          </form>
-
-          <h1>CURRENT VESSEL PLANS</h1>
+          <PlanForm/>
+          <h1>VESSEL PLANS</h1>
            <p>Containers that are assigned to vessels</p>
           <ResponsiveTable
-            tableData={this.state.vesselPlans}
+            tableData={this.props.vesselPlans}
             tableHeaders={['Vessel (id)', 'containers (id)']}
           />
-           
-            {this.state.vesselPlans}
         </div>
     )
   }
 }
 
-export default VesselPlans
+const mapStateToProps = state => ({
+  vesselPlans: state.vesselPlans.items,
+  loading: state.vesselPlans.loading,
+  error: state.vesselPlans.error
+});
+
+export default connect(mapStateToProps)(VesselPlans)

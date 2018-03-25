@@ -1,44 +1,12 @@
 import React, { Component } from 'react'
-import { push } from 'react-router-redux'
-import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
-import { Button } from 'react-bootstrap';
-import PropTypes from 'prop-types'
-import {
-    increment,
-    incrementAsync,
-    decrement,
-    decrementAsync,
-    getVessels,
-    getContainers,
-    getVesselPlans,
-    createVesselPlans,
-    getVesselTable
-  } from '../../modules/counter'
-  import { fetchVessels } from '../../actions/apiActions'
-  import { VesselReducer } from '../../reducers/vesselReducer'
-//import {vessels} from '../../modules/vessels'
+import { fetchVessels } from '../../actions/apiActions'
+import { VesselReducer } from '../../reducers/vesselReducer'
 import ResponsiveTable from './../../components/responsiveTable';
 require('./style.scss');
 
-const styles = {
-  headline: {
-    fontSize: 24,
-    paddingTop: 16,
-    marginBottom: 12,
-    fontWeight: 400,
-  },
-};
 
 class Vessels extends Component {
-
-  /*constructor(props){
-    super(props);
-    this.vessels = [];
-    this.state = {
-      vessels: [],
-    }
-  }*/
 
   componentDidMount(){
     this.props.dispatch(fetchVessels());

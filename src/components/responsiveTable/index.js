@@ -37,7 +37,10 @@ require('./style.scss');
                                 })}
                             </tr>
                         );
-                    }) : <tr>No data found</tr> }
+                    }) : <tr>
+                            <td>No data found</td>
+                            <td></td>
+                        </tr> }
                 </tbody>
             </Table>
           )

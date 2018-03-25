@@ -16,6 +16,7 @@ export const fetchVesselPlansFailure = error => ({
   payload: { error }
 });
 
+
 export function fetchVesselPlans() {
   return dispatch => {
     dispatch(fetchVesselPlansBegin());
@@ -30,21 +31,6 @@ export function fetchVesselPlans() {
       .catch(error => dispatch(fetchVesselPlansFailure(error)));
     });
 }
-}
-
-export function postVesselPlans() {
-  return dispatch => {
-    dispatch(fetchVesselPlansBegin());
-    return fetch("/products")
-      .then(handleErrors)
-      .then(res => res.json())
-      .then(json => {
-        console.log(json);
-        dispatch(fetchVesselPlansSuccess(json.products));
-        return json.products;
-      })
-      .catch(error => dispatch(fetchVesselPlansFailure(error)));
-  };
 }
 
   // Handle HTTP errors since fetch won't.
